@@ -1,0 +1,93 @@
+<?php
+
+      /**
+       * @file
+       * API
+
+       * Está funcion permite identificar el tipo de metodo HTTP que se solicita, seguidamente, hacemos el llamado de la función que se
+       * encarga mediante "curl", solicitar la información a la url de la api
+       */
+      function my_module_reponse($url, $method = 'GET', $params = array()) {
+        $methods = [
+          'POST',
+          'GET',
+          'PUT',
+          'DELETE'
+        ];
+        $result = array();
+
+        try {
+          if (empty($url)) {
+            throw new Exception("Invalid url");
+          }
+          if (in_array(strtoupper($method), $methods) === FALSE) {
+            throw new Exception("Invalid method");
+          }
+          else {
+            // will need a request call for GET, POST, PUT
+            switch (strtoupper($method)) {
+              case 'GET':
+              case 'POST':
+              case 'PUT':
+              case 'DELETE':
+                if (function_exists('my_module_call_request')) {
+                  $result = my_module_call_request($url, $method, $params);
+                }
+                break;
+              default:
+                throw new Exception("Invalid method");
+                break;
+            }
+          }
+        }
+        catch (Exception $e) {
+          echo $e->getMessage();
+        }
+
+        return $result;
+      }
+
+      /*
+      * Esta funcion es la encarga de realizar la petición mediante "curl", para que la información sea retornada
+      */
+
+      function my_module_call_request($requesturl, $method, $params = array()) {
+
+        // request url
+        $url = $requesturl;
+
+        try {
+
+          // iniciarlizar curl
+          $ch = curl_init();
+
+          // Agregar cabeceras a curl
+          $headers = array(
+            "Cache-Control: no-cache",
+            "Pragma: no-cache"
+          );
+
+          // agregar las caracteristicas requeridas para la utilización de "curl"
+          curl_setopt($ch, CURLOPT_URL, $url);
+          curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+          curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+          curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+          curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
+
+          // Si existe valor adicionales, se enviar al "curl"
+          curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+
+          // Se realiza la ejecución del proceso del "curl"
+          $result = curl_exec($ch);
+          // Se cierra la conexión del "curl"
+          curl_close($ch);
+
+          return $result;
+        }
+        catch (Exception $e) {
+          echo $e->getMessage();
+        }
+      }
+
+    ?>

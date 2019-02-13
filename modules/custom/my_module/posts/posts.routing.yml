@@ -1,0 +1,7 @@
+posts.list:
+    path: 'drupalind/posts'
+    defaults:
+      _controller: '\Drupal\posts\Controller\PostsController::getList'
+      _title: 'Get List'
+    requirements:
+      _permission: 'access content' 

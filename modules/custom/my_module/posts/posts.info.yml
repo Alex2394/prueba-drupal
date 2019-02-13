@@ -1,0 +1,4 @@
+name: Drupal controller with theme
+description: Imprimir los posts
+type: module
+core: 8.x

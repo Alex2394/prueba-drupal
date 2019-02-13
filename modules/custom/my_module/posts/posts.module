@@ -1,0 +1,17 @@
+<?php
+	 /**
+   * implements hook_theme();
+   * description: create the file as per below
+   * eg : products-list.html.twig  for "products_list"
+   */
+  function posts_theme($existing, $type, $theme, $path) {
+    return array(
+      'posts_list' => array(
+        'variables' => array(
+          'pagehtml' => NULL,
+          'data' => NULL
+        )
+      ),
+    );
+  }
+?>

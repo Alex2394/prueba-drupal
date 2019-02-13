@@ -1,0 +1,4 @@
+name: Drupal Modulo Principal
+description: Metodos HTTP
+type: module
+core: 8.x
